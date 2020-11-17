@@ -1,0 +1,49 @@
+server:
+  port: 8502
+  servlet:
+    # 配置统一访问前缀
+      context-path: /consumer
+
+kafka:
+  names: test,change
+  test:
+    type: consumer
+    #  表示kafka不持有当前offset时应当采用的策略
+    auto-offset-reset: latest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group-id: 10
+    bootstrap-servers: 127.0.0.1:9092
+    topic: topic_test
+    #  配置sasl安全机制
+    properties:
+      sasl.mechanism: # PLAIN
+      security.protocol: #  SASL_PLAINTEXT
+      sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
+    enable-auto-commit: true
+    client-id: 10-1
+    max-poll-records: 1
+    auto-commit-interval: 100
+    heartbeat-interval: 50
+    isolation-level: read_committed
+  change:
+    type: consumer
+    #  表示kafka不持有当前offset时应当采用的策略
+    auto-offset-reset: latest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    group-id: 20
+    bootstrap-servers: 127.0.0.1:9092
+    topic: topic_change
+    #  配置sasl安全机制
+    properties:
+      sasl.mechanism: # PLAIN
+      security.protocol: #  SASL_PLAINTEXT
+      sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
+    enable-auto-commit: false
+    client-id: 20-1
+    max-poll-records: 1
+    auto-commit-interval: 100
+    heartbeat-interval: 30
+    isolation-level: read_committed
+

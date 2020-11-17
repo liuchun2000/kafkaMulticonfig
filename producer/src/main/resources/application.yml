@@ -1,0 +1,60 @@
+server:
+  port: 8501
+  servlet:
+    # 配置统一访问前缀
+    context-path: /producer
+  tomcat:
+    accesslog:
+      # 打印tomcat日志, 获取nginx代理过的真实ip(ps: 这里需要nginx采用配套配置)
+      pattern: "%{X-Real-IP}i %l %u %t &quot;%r&quot; %s %b %a"
+    max-http-form-post-size: 2MB
+
+kafka:
+  names: test,change
+  test:
+    type: producer
+    #  表示所有broker都确认接收成功
+    acks: all
+    retries: 0
+    #      批处理大小
+    batch-size: 16384
+    buffer-memory: 33554432
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #      延迟发送时间
+    linger: 5
+    #  配置sasl安全机制
+    properties:
+      sasl.mechanism:  # PLAIN
+      security.protocol: #  SASL_PLAINTEXT
+      sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
+    bootstrap-servers: 127.0.0.1:9092
+    topic: topic_test
+    transaction-id-prefix: 1
+    client-id: test-producer
+  change:
+    type: producer
+    #  表示所有broker都确认接收成功
+    acks: all
+    retries: 0
+    #      批处理大小
+    batch-size: 16384
+    buffer-memory: 33554432
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #      延迟发送时间
+    linger: 5
+    #  配置sasl安全机制
+    properties:
+      sasl.mechanism:  # PLAIN
+      security.protocol: #  SASL_PLAINTEXT
+      sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
+    bootstrap-servers: 127.0.0.1:9092
+    topic: topic_change
+    transaction-id-prefix: 1
+    client-id: change-producer
+
+# spring 集成kafka配置
+spring:
+  application:
+    name: producer
