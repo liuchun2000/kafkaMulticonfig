@@ -21,7 +21,7 @@ kafka:
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
     enable-auto-commit: true
-    client-id: ${spring.kafka.consumer.group-id}-test-1
+    client-id: ${spring.kafka.consumer.group-id}-1
     max-poll-records: 1
     auto-commit-interval: 100
     heartbeat-interval: 50
@@ -41,7 +41,7 @@ kafka:
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
     enable-auto-commit: false
-    client-id: ${spring.kafka.consumer.group-id}-change-1
+    client-id: ${spring.kafka.consumer.group-id}-1
     max-poll-records: 1
     auto-commit-interval: 100
     heartbeat-interval: 30

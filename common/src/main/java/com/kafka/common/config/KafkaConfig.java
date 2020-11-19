@@ -99,7 +99,7 @@ public class KafkaConfig implements ImportBeanDefinitionRegistrar, EnvironmentAw
 
                     //KafkaMessageListenerContainer<String, String> consumer = listenerFactory(consumerFactory(templateConfigMap),topic);
                     //config consumer
-                    KafkaConsumer<String, String> consumer = new KafkaConsumer<String,String>(consumerConfigs(templateConfigMap));
+                    KafkaConsumer<String, String> consumer = new KafkaConsumer<String,String>(consumerConfigs(templateNamesArray[i],templateConfigMap));
                     consumer.subscribe(Collections.singleton(topic));
                     consumerListeners.put(topic,consumer);
                 }
@@ -140,9 +140,9 @@ public class KafkaConfig implements ImportBeanDefinitionRegistrar, EnvironmentAw
      * 本身的KafkaConsumer是线程不安全的，无法并发操作，这里spring又在包装了一层，
      * 根据配置的spring.kafka.listener.concurrency来生成多个并发的KafkaMessageListenerContainer实例
      */
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory(Map propMap) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory(String namePrefix,Map propMap) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory(propMap));
+        factory.setConsumerFactory(consumerFactory(namePrefix,propMap));
         factory.setAutoStartup(true);
         //设置并发量，小于或等于Topic的分区数,并且要在consumerFactory设置一次拉取的数量
         factory.setConcurrency(1);
@@ -162,8 +162,8 @@ public class KafkaConfig implements ImportBeanDefinitionRegistrar, EnvironmentAw
         return factory;
     }
 
-    public ConsumerFactory<String, String> consumerFactory(Map propMap) {
-        return new DefaultKafkaConsumerFactory<>(consumerConfigs(propMap));
+    public ConsumerFactory<String, String> consumerFactory(String namePrefix,Map propMap) {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs(namePrefix,propMap));
     }
 
     /**
@@ -194,7 +194,7 @@ public class KafkaConfig implements ImportBeanDefinitionRegistrar, EnvironmentAw
     /**
      * 消费者基本配置
      */
-    private Map<String, Object> consumerConfigs(Map propMap) {
+    private Map<String, Object> consumerConfigs(String namePrefix, Map propMap) {
         Map<String, Object> propsMap = new HashMap<>(12);
         propsMap.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, propMap.get("bootstrap-servers"));
         propsMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -204,7 +204,7 @@ public class KafkaConfig implements ImportBeanDefinitionRegistrar, EnvironmentAw
         propsMap.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG,propMap.get("auto-commit-interval"));
         propsMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,propMap.get("enable-auto-commit"));
         propsMap.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,propMap.get("max-poll-records"));
-        propsMap.put(ConsumerConfig.CLIENT_ID_CONFIG,propMap.get("client-id"));
+        propsMap.put(ConsumerConfig.CLIENT_ID_CONFIG,namePrefix+propMap.get("client-id"));
         return propsMap;
     }
 

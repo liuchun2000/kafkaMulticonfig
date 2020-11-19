@@ -60,4 +60,12 @@ spring:
     name: producer
   kafka:
     bootstrap-servers: 127.0.0.1:9092
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: liuchun
+    password: 123456
+    virtual-host: test
+
+
 
