@@ -12,8 +12,8 @@ kafka:
     auto-offset-reset: latest
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    group-id: 10
-    bootstrap-servers: 127.0.0.1:9092
+    group-id: ${spring.kafka.consumer.group-id}
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
     topic: topic_test
     #  配置sasl安全机制
     properties:
@@ -21,7 +21,7 @@ kafka:
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
     enable-auto-commit: true
-    client-id: 10-1
+    client-id: ${spring.kafka.consumer.group-id}-test-1
     max-poll-records: 1
     auto-commit-interval: 100
     heartbeat-interval: 50
@@ -32,8 +32,8 @@ kafka:
     auto-offset-reset: latest
     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    group-id: 20
-    bootstrap-servers: 127.0.0.1:9092
+    group-id: ${spring.kafka.consumer.group-id}
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
     topic: topic_change
     #  配置sasl安全机制
     properties:
@@ -41,9 +41,17 @@ kafka:
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
     enable-auto-commit: false
-    client-id: 20-1
+    client-id: ${spring.kafka.consumer.group-id}-change-1
     max-poll-records: 1
     auto-commit-interval: 100
     heartbeat-interval: 30
     isolation-level: read_committed
+
+spring:
+  application:
+    name: consumer-a
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      group-id: ${spring.application.name}
 

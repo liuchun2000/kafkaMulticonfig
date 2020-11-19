@@ -9,16 +9,19 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.Duration;
 import java.util.Collections;
 
 
-@Service
+@Component
 @Slf4j
-public class KafkaConsumers implements InitializingBean {
+public class KafkaConsumers implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaConsumers.class);
 
@@ -32,7 +35,7 @@ public class KafkaConsumers implements InitializingBean {
      * 异常请自己根据需求自己处理
      */
     @Override
-    public void afterPropertiesSet() {
+    public void run(String... args) throws Exception {
         // 初始化topic
         consumerListeners.getConsumerListeners().forEach((topic,listener)-> {
             // method one：订阅topic:

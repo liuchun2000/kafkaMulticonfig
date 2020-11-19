@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
  * @Date: 2020/11/12 14:12
  */
 @SpringBootApplication(exclude = {KafkaAutoConfiguration.class})
-@Import(KafkaConfig.class)
+@Import({KafkaConfig.class})
 @ComponentScan(basePackages = {"com.kafka.common","com.kafka.producer"})
 public class ProducerApplication {
     /**

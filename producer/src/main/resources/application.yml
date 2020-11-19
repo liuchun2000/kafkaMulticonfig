@@ -28,7 +28,7 @@ kafka:
       sasl.mechanism:  # PLAIN
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
     topic: topic_test
     transaction-id-prefix: 1
     client-id: test-producer
@@ -49,7 +49,7 @@ kafka:
       sasl.mechanism:  # PLAIN
       security.protocol: #  SASL_PLAINTEXT
       sasl.jaas.config: #  org.apache.kafka.common.security.plain.PlainLoginModule required username="xxxx" password="xxxx";
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
     topic: topic_change
     transaction-id-prefix: 1
     client-id: change-producer
@@ -58,3 +58,6 @@ kafka:
 spring:
   application:
     name: producer
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+
